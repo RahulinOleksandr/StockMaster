@@ -1,0 +1,37 @@
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\appsettings.Development.json
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\appsettings.json
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\First web project.staticwebassets.endpoints.json
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\First web project.exe
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\First web project.deps.json
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\First web project.runtimeconfig.json
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\First web project.dll
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\First web project.pdb
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\Microsoft.OpenApi.dll
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.csproj.AssemblyReference.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\rpswa.dswa.cache.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.GeneratedMSBuildEditorConfig.editorconfig
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.AssemblyInfoInputs.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.AssemblyInfo.cs
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.csproj.CoreCompileInputs.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.MvcApplicationPartsAssemblyInfo.cs
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.MvcApplicationPartsAssemblyInfo.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\rjimswa.dswa.cache.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\scopedcss\bundle\First web project.styles.css
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\staticwebassets.build.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\staticwebassets.build.json.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\staticwebassets.development.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\swae.build.ex.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First we.9377D17D.Up2Date
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.dll
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\refint\First web project.dll
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.pdb
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\First web project.genruntimeconfig.cache
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\ref\First web project.dll
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Work\PET_PROJECT\First web project\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Work\PET_PROJECT\First web project\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

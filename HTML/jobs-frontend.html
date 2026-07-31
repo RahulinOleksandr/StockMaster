@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Тест підключення до API</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+        #error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Список вакансій (з API)</h1>
+    <button onclick="loadJobs()">Завантажити дані</button>
+    <div id="error"></div>
+    <table id="jobsTable" style="display:none;">
+        <thead>
+            <tr><th>ID</th><th>Назва</th><th>Опис</th></tr>
+        </thead>
+        <tbody id="jobsBody"></tbody>
+    </table>
+
+    <script>
+        const API_URL = "http://localhost:5239/api/values/GetJobList";
+
+        async function loadJobs()
+        {
+            const errorDiv = document.getElementById("error");
+            const table = document.getElementById("jobsTable");
+            const tbody = document.getElementById("jobsBody");
+
+            errorDiv.textContent = "";
+            tbody.innerHTML = "";
+
+            try
+            {
+                const response = await fetch(API_URL);
+
+                if (!response.ok) {
+                    throw new Error(`Сервер повернув помилку: ${response.status}`);
+                }
+
+                const jobs = await response.json();
+
+                jobs.forEach(job =>
+                {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td>${job.jobId}</td><td>${job.jobName}</td><td>${job.jobDescription}</td>`;
+                    tbody.appendChild(row);
+                });
+
+                table.style.display = "table";
+            }
+            catch (err)
+            {
+                errorDiv.textContent = "Помилка: " + err.message +
+                    ". Перевір, чи запущений API і чи правильний порт в API_URL.";
+            }
+        }
+    </script>
+</body>
+</html>
