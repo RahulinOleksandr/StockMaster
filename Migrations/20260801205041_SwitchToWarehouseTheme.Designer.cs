@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock_Master.Data;
 
@@ -10,9 +11,11 @@ using Stock_Master.Data;
 namespace Stock_Master.Migrations
 {
     [DbContext(typeof(DBContent))]
-    partial class DBContentModelSnapshot : ModelSnapshot
+    [Migration("20260801205041_SwitchToWarehouseTheme")]
+    partial class SwitchToWarehouseTheme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

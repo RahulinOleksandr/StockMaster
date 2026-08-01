@@ -2,64 +2,202 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Тест підключення до API</title>
+    <title>Складський облік — тест API</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background: #f0f0f0; }
-        #error { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 15px;
+            border-bottom: 3px solid transparent;
+        }
+
+            .tab-btn.active {
+                border-bottom-color: #2563eb;
+                font-weight: bold;
+                color: #2563eb;
+            }
+
+        .panel {
+            display: none;
+        }
+
+            .panel.active {
+                display: block;
+            }
+
+        button.action {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        #error {
+            color: #c0392b;
+            margin: 10px 0;
+            min-height: 20px;
+        }
+
+        .badge {
+            background: #eef2ff;
+            color: #2563eb;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <h1>Список вакансій (з API)</h1>
-    <button onclick="loadJobs()">Завантажити дані</button>
+    <h1>📦 Складський облік</h1>
+    <p style="color:#666">Тестова сторінка для перевірки роботи API</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="products">Товари</button>
+        <button class="tab-btn" data-tab="warehouses">Склади</button>
+        <button class="tab-btn" data-tab="stock">Залишки</button>
+    </div>
+
     <div id="error"></div>
-    <table id="jobsTable" style="display:none;">
-        <thead>
-            <tr><th>ID</th><th>Назва</th><th>Опис</th></tr>
-        </thead>
-        <tbody id="jobsBody"></tbody>
-    </table>
+
+    <!-- Товари -->
+    <div class="panel active" id="products-panel">
+        <button class="action" onclick="loadProducts()">🔄 Завантажити товари</button>
+        <table>
+            <thead><tr><th>ID</th><th>Назва</th><th>Категорія</th><th>Ціна</th></tr></thead>
+            <tbody id="productsBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Склади -->
+    <div class="panel" id="warehouses-panel">
+        <button class="action" onclick="loadWarehouses()">🔄 Завантажити склади</button>
+        <table>
+            <thead><tr><th>ID</th><th>Назва складу</th><th>Адреса</th></tr></thead>
+            <tbody id="warehousesBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Залишки -->
+    <div class="panel" id="stock-panel">
+        <button class="action" onclick="loadStock()">🔄 Завантажити залишки</button>
+        <table>
+            <thead><tr><th>Товар</th><th>Склад</th><th>Кількість</th></tr></thead>
+            <tbody id="stockBody"></tbody>
+        </table>
+    </div>
 
     <script>
-        const API_URL = "http://localhost:5239/api/values/GetJobList";
+        // !!! Заміни порт, якщо у тебе інший (дивись launchSettings.json) !!!
+        const BASE_URL = "http://localhost:5239/api";
 
-        async function loadJobs()
-        {
-            const errorDiv = document.getElementById("error");
-            const table = document.getElementById("jobsTable");
-            const tbody = document.getElementById("jobsBody");
+        // --- Switching between tabs ---
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+                btn.classList.add("active");
+                document.getElementById(btn.dataset.tab + "-panel").classList.add("active");
+            });
+        });
 
-            errorDiv.textContent = "";
+        function showError(message) {
+            document.getElementById("error").textContent = message;
+        }
+
+        // --- Products ---
+        async function loadProducts() {
+            showError("");
+            const tbody = document.getElementById("productsBody");
             tbody.innerHTML = "";
-
-            try
-            {
-                const response = await fetch(API_URL);
-
-                if (!response.ok) {
-                    throw new Error(`Сервер повернув помилку: ${response.status}`);
-                }
-
-                const jobs = await response.json();
-
-                jobs.forEach(job =>
-                {
+            try {
+                const res = await fetch(`${BASE_URL}/products`);
+                if (!res.ok) throw new Error(`Помилка сервера: ${res.status}`);
+                const products = await res.json();
+                products.forEach(p => {
                     const row = document.createElement("tr");
-                    row.innerHTML = `<td>${job.jobId}</td><td>${job.jobName}</td><td>${job.jobDescription}</td>`;
+                    row.innerHTML = `<td>${p.productId}</td><td>${p.productName}</td><td>${p.category}</td><td>${p.price} ₴</td>`;
                     tbody.appendChild(row);
                 });
-
-                table.style.display = "table";
-            }
-            catch (err)
-            {
-                errorDiv.textContent = "Помилка: " + err.message +
-                    ". Перевір, чи запущений API і чи правильний порт в API_URL.";
+            } catch (err) {
+                showError("Помилка завантаження товарів: " + err.message);
             }
         }
+
+        // --- Warehouses ---
+        async function loadWarehouses() {
+            showError("");
+            const tbody = document.getElementById("warehousesBody");
+            tbody.innerHTML = "";
+            try {
+                const res = await fetch(`${BASE_URL}/warehouses`);
+                if (!res.ok) throw new Error(`Помилка сервера: ${res.status}`);
+                const warehouses = await res.json();
+                warehouses.forEach(w => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td>${w.warehouseId}</td><td>${w.warehouseName}</td><td>${w.address}</td>`;
+                    tbody.appendChild(row);
+                });
+            } catch (err) {
+                showError("Помилка завантаження складів: " + err.message);
+            }
+        }
+
+        // --- Balances ---
+        async function loadStock() {
+            showError("");
+            const tbody = document.getElementById("stockBody");
+            tbody.innerHTML = "";
+            try {
+                const res = await fetch(`${BASE_URL}/stock`);
+                if (!res.ok) throw new Error(`Помилка сервера: ${res.status}`);
+                const stocks = await res.json();
+                stocks.forEach(s => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td>${s.productName}</td><td>${s.warehouseName}</td><td><span class="badge">${s.quantity} шт</span></td>`;
+                    tbody.appendChild(row);
+                });
+            } catch (err) {
+                showError("Помилка завантаження залишків: " + err.message);
+            }
+        }
+
+        loadProducts();
     </script>
 </body>
 </html>
