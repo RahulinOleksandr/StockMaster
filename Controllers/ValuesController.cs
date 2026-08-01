@@ -1,6 +1,8 @@
 ﻿using First_web_project.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using First_web_project.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace First_web_project.Controllers
 {
@@ -9,45 +11,62 @@ namespace First_web_project.Controllers
 
     public class ValuesController : ControllerBase
     {
-        [Route("GetJobList")]
-        [HttpGet]
-        public List<Class> GetAllInfo()
+        private readonly DBContent _context;
+
+        public ValuesController(DBContent context)
         {
-            List<Class> list = new List<Class>();
+            _context = context;
+        }
 
-            Class _job1 = new Class()
-            {
-                jobId = 0,
-                jobName = ".Net dev",
-                jobDescription = "Web"
-            };
-            list.Add(_job1);
+        // GET "GetJobList"
+        [HttpGet("GetJobList")]
+        public async Task<ActionResult<List<Class>>> GetAllInfo()
+        {
+            return await _context.Jobs.ToListAsync();
+        }
 
-            Class _job2 = new Class()
-            {
-                jobId = 1,
-                jobName = "React",
-                jobDescription = "full stack"
-            };
-            list.Add(_job2);
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Class>> GetById(int id)
+        {
+            var job = await _context.Jobs.FindAsync(id);
+            if (job == null) return NotFound();
+            return job;
+        }
 
-            Class _job3 = new Class()
-            {
-                jobId = 2,
-                jobName = "C++",
-                jobDescription = "back"
-            };
-            list.Add(_job3);
+        // POST api/values
+        [HttpPost]
+        public async Task<ActionResult<Class>> Create(Class newJob)
+        {
+            _context.Jobs.Add(newJob);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { id = newJob.jobId }, newJob);
+        }
 
-            Class _job4 = new Class()
-            {
-                jobId = 3,
-                jobName = "C++",
-                jobDescription = "game dev"
-            };
-            list.Add(_job4);
+        // PUT "5"
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Class updatedJob)
+        {
+            var job = await _context.Jobs.FindAsync(id);
+            if (job == null) return NotFound();
 
-            return list;
+            job.jobName = updatedJob.jobName;
+            job.jobDescription = updatedJob.jobDescription;
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // DELETE "5"
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var job = await _context.Jobs.FindAsync(id);
+            if (job == null) return NotFound();
+
+            _context.Jobs.Remove(job);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
