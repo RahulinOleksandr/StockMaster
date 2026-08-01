@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using First_web_project.Models;
+using Stock_Master.Models;
 
-namespace First_web_project.Data
+namespace Stock_Master.Data
 {
     public class DBContent : DbContext
     {

@@ -1,10 +1,10 @@
-﻿using First_web_project.Models;
+﻿using Stock_Master.Models;
 using Microsoft.AspNetCore.Mvc;
-using First_web_project.Data;
+using Stock_Master.Data;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace First_web_project.Controllers
+namespace Stock_Master.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

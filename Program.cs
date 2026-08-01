@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using First_web_project.Data;
+using Stock_Master.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

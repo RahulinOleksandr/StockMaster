@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>First_web_project</RootNamespace>
+    <RootNamespace>Stock_Master</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

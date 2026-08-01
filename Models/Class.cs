@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace First_web_project.Models
+namespace Stock_Master.Models
 {
     public class Class
     {
