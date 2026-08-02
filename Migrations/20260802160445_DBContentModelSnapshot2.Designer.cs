@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock_Master.Data;
 
@@ -10,9 +11,11 @@ using Stock_Master.Data;
 namespace Stock_Master.Migrations
 {
     [DbContext(typeof(DBContent))]
-    partial class DBContentModelSnapshot : ModelSnapshot
+    [Migration("20260802160445_DBContentModelSnapshot2")]
+    partial class DBContentModelSnapshot2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

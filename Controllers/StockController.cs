@@ -62,6 +62,11 @@ namespace Stock_Master.Controllers
         [HttpPost]
         public async Task<ActionResult<Stock>> AddOrUpdateStock(Stock newStock)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var existing = await _context.Stocks
                 .FirstOrDefaultAsync(s => s.ProductId == newStock.ProductId && s.WarehouseId == newStock.WarehouseId);
 
@@ -82,6 +87,11 @@ namespace Stock_Master.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateQuantity(int id, int quantity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var stock = await _context.Stocks.FindAsync(id);
             if (stock == null) return NotFound();
 

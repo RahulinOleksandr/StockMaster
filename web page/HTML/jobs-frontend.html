@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Складський облік — тест API</title>
+    <link rel="stylesheet" href="../CSS/styles.css">
+    <script src="../JS/script.js" defer></script>
+</head>
+<body>
+    <h1>📦 Складський облік</h1>
+    <p style="color:#666">Тестова сторінка для перевірки роботи API з повним CRUD</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="products">Товари</button>
+        <button class="tab-btn" data-tab="warehouses">Склади</button>
+        <button class="tab-btn" data-tab="stock">Залишки</button>
+        <button class="tab-btn" data-tab="categories">Категорії</button>
+    </div>
+
+    <div id="error"></div>
+
+    <!-- ===================== PRODUCTS ===================== -->
+    <div class="panel active" id="products-panel">
+        <button class="action" onclick="loadProducts()">🔄 Оновити</button>
+        <button class="action primary" onclick="openProductForm()">➕ Додати товар</button>
+
+        <div class="form-box" id="productForm">
+            <input type="hidden" id="productId">
+            <input type="text" id="productName" placeholder="Назва товару">
+            <select id="productCategoryId"><option value="">Категорія...</option></select>
+            <input type="number" id="productPrice" placeholder="Ціна" step="0.01">
+            <button class="save" onclick="saveProduct()">Зберегти</button>
+            <button class="cancel" onclick="closeProductForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Дії</th></tr></thead>
+            <tbody id="productsBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ===================== WAREHOUSES ===================== -->
+    <div class="panel" id="warehouses-panel">
+        <button class="action" onclick="loadWarehouses()">🔄 Оновити</button>
+        <button class="action primary" onclick="openWarehouseForm()">➕ Додати склад</button>
+
+        <div class="form-box" id="warehouseForm">
+            <input type="hidden" id="warehouseId">
+            <input type="text" id="warehouseName" placeholder="Назва складу">
+            <input type="text" id="warehouseAddress" placeholder="Адреса">
+            <button class="save" onclick="saveWarehouse()">Зберегти</button>
+            <button class="cancel" onclick="closeWarehouseForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>Назва складу</th><th>Адреса</th><th>Дії</th></tr></thead>
+            <tbody id="warehousesBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ===================== STOCK ===================== -->
+    <div class="panel" id="stock-panel">
+        <button class="action" onclick="loadStock()">🔄 Оновити</button>
+        <button class="action primary" onclick="openStockForm()">➕ Додати залишок</button>
+
+        <div class="form-box" id="stockForm">
+            <select id="stockProductId"><option value="">Товар...</option></select>
+            <select id="stockWarehouseId"><option value="">Склад...</option></select>
+            <input type="number" id="stockQuantity" placeholder="Кількість">
+            <button class="save" onclick="saveStock()">Зберегти</button>
+            <button class="cancel" onclick="closeStockForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>Товар</th><th>Склад</th><th>Кількість</th><th>Дії</th></tr></thead>
+            <tbody id="stockBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ===================== CATEGORIES ===================== -->
+    <div class="panel" id="categories-panel">
+        <button class="action" onclick="loadCategories()">🔄 Оновити</button>
+        <button class="action primary" onclick="openCategoryForm()">➕ Додати категорію</button>
+
+        <div class="form-box" id="categoryForm">
+            <input type="hidden" id="categoryId">
+            <input type="text" id="categoryName" placeholder="Назва категорії">
+            <button class="save" onclick="saveCategory()">Зберегти</button>
+            <button class="cancel" onclick="closeCategoryForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>Назва категорії</th><th>Дії</th></tr></thead>
+            <tbody id="categoriesBody"></tbody>
+        </table>
+    </div>
+</body>
+</html>
