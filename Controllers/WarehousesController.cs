@@ -31,6 +31,11 @@ namespace Stock_Master.Controllers
         [HttpPost]
         public async Task<ActionResult<Warehouse>> Create(Warehouse newWarehouse)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             newWarehouse.warehouseId = 0;
             _context.Warehouses.Add(newWarehouse);
             await _context.SaveChangesAsync();
@@ -40,6 +45,11 @@ namespace Stock_Master.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Warehouse updated)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var warehouse = await _context.Warehouses.FindAsync(id);
             if (warehouse == null) return NotFound();
 
