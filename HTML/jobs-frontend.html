@@ -2,64 +2,475 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Тест підключення до API</title>
+    <title>Складський облік — тест API</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background: #f0f0f0; }
-        #error { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 15px;
+            border-bottom: 3px solid transparent;
+        }
+
+            .tab-btn.active {
+                border-bottom-color: #2563eb;
+                font-weight: bold;
+                color: #2563eb;
+            }
+
+        .panel {
+            display: none;
+        }
+
+            .panel.active {
+                display: block;
+            }
+
+        button.action {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-bottom: 15px;
+        }
+
+        button.primary {
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button.danger {
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        button.edit {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+            th:last-child, td:last-child {
+                width: 90px;
+                white-space: nowrap;
+            }
+
+        #error {
+            color: #c0392b;
+            margin: 10px 0;
+            min-height: 20px;
+        }
+
+        .badge {
+            background: #eef2ff;
+            color: #2563eb;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .form-box {
+            display: none;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+            .form-box.active {
+                display: flex;
+            }
+
+            .form-box input, .form-box select {
+                padding: 7px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            .form-box button {
+                padding: 7px 14px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+                .form-box button.save {
+                    background: #16a34a;
+                    color: white;
+                    border: none;
+                }
+
+                .form-box button.cancel {
+                    background: #e5e7eb;
+                    border: none;
+                }
     </style>
 </head>
 <body>
-    <h1>Список вакансій (з API)</h1>
-    <button onclick="loadJobs()">Завантажити дані</button>
+    <h1>📦 Складський облік</h1>
+    <p style="color:#666">Тестова сторінка для перевірки роботи API з повним CRUD</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="products">Товари</button>
+        <button class="tab-btn" data-tab="warehouses">Склади</button>
+        <button class="tab-btn" data-tab="stock">Залишки</button>
+    </div>
+
     <div id="error"></div>
-    <table id="jobsTable" style="display:none;">
-        <thead>
-            <tr><th>ID</th><th>Назва</th><th>Опис</th></tr>
-        </thead>
-        <tbody id="jobsBody"></tbody>
-    </table>
+
+    <!-- ===================== PRODUCTS ===================== -->
+    <div class="panel active" id="products-panel">
+        <button class="action" onclick="loadProducts()">🔄 Оновити</button>
+        <button class="action primary" onclick="openProductForm()">➕ Додати товар</button>
+
+        <div class="form-box" id="productForm">
+            <input type="hidden" id="productId">
+            <input type="text" id="productName" placeholder="Назва товару">
+            <input type="text" id="productCategory" placeholder="Категорія">
+            <input type="number" id="productPrice" placeholder="Ціна" step="0.01">
+            <button class="save" onclick="saveProduct()">Зберегти</button>
+            <button class="cancel" onclick="closeProductForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Дії</th></tr></thead>
+            <tbody id="productsBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ===================== COMPOSITION ===================== -->
+    <div class="panel" id="warehouses-panel">
+        <button class="action" onclick="loadWarehouses()">🔄 Оновити</button>
+        <button class="action primary" onclick="openWarehouseForm()">➕ Додати склад</button>
+
+        <div class="form-box" id="warehouseForm">
+            <input type="hidden" id="warehouseId">
+            <input type="text" id="warehouseName" placeholder="Назва складу">
+            <input type="text" id="warehouseAddress" placeholder="Адреса">
+            <button class="save" onclick="saveWarehouse()">Зберегти</button>
+            <button class="cancel" onclick="closeWarehouseForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>Назва складу</th><th>Адреса</th><th>Дії</th></tr></thead>
+            <tbody id="warehousesBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ===================== BALANCES ===================== -->
+    <div class="panel" id="stock-panel">
+        <button class="action" onclick="loadStock()">🔄 Оновити</button>
+        <button class="action primary" onclick="openStockForm()">➕ Додати залишок</button>
+
+        <div class="form-box" id="stockForm">
+            <select id="stockProductId"><option value="">Товар...</option></select>
+            <select id="stockWarehouseId"><option value="">Склад...</option></select>
+            <input type="number" id="stockQuantity" placeholder="Кількість">
+            <button class="save" onclick="saveStock()">Зберегти</button>
+            <button class="cancel" onclick="closeStockForm()">Скасувати</button>
+        </div>
+
+        <table>
+            <thead><tr><th>Товар</th><th>Склад</th><th>Кількість</th><th>Дії</th></tr></thead>
+            <tbody id="stockBody"></tbody>
+        </table>
+    </div>
 
     <script>
-        const API_URL = "http://localhost:5239/api/values/GetJobList";
+        const BASE_URL = "http://localhost:5239/api";
 
-        async function loadJobs()
-        {
-            const errorDiv = document.getElementById("error");
-            const table = document.getElementById("jobsTable");
-            const tbody = document.getElementById("jobsBody");
+        // --- Switching between tabs ---
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+                btn.classList.add("active");
+                document.getElementById(btn.dataset.tab + "-panel").classList.add("active");
+            });
+        });
 
-            errorDiv.textContent = "";
+        function showError(message) {
+            document.getElementById("error").textContent = message;
+        }
+
+        // universal function for queries (to avoid duplicating try/catch blocks)
+        async function apiCall(url, method = "GET", body = null) {
+            const options = { method };
+            if (body) {
+                options.headers = { "Content-Type": "application/json" };
+                options.body = JSON.stringify(body);
+            }
+            const res = await fetch(url, options);
+            if (!res.ok) throw new Error(`Помилка сервера: ${res.status}`);
+            if (res.status === 204) return null; // No Content
+            return res.json();
+        }
+
+        // ==================== products ======================
+
+        let allProducts = [];
+
+        async function loadProducts() {
+            showError("");
+            const tbody = document.getElementById("productsBody");
             tbody.innerHTML = "";
-
-            try
-            {
-                const response = await fetch(API_URL);
-
-                if (!response.ok) {
-                    throw new Error(`Сервер повернув помилку: ${response.status}`);
-                }
-
-                const jobs = await response.json();
-
-                jobs.forEach(job =>
-                {
+            try {
+                allProducts = await apiCall(`${BASE_URL}/products`);
+                allProducts.forEach(p => {
                     const row = document.createElement("tr");
-                    row.innerHTML = `<td>${job.jobId}</td><td>${job.jobName}</td><td>${job.jobDescription}</td>`;
+                    row.innerHTML = `
+                                        <td>${p.productId}</td><td>${p.productName}</td><td>${p.category}</td><td>${p.price} ₴</td>
+                                        <td>
+                                            <button class="edit" onclick='openProductForm(${JSON.stringify(p)})'>✏️</button>
+                                            <button class="danger" onclick="deleteProduct(${p.productId})">🗑️</button>
+                                        </td>`;
                     tbody.appendChild(row);
                 });
-
-                table.style.display = "table";
-            }
-            catch (err)
-            {
-                errorDiv.textContent = "Помилка: " + err.message +
-                    ". Перевір, чи запущений API і чи правильний порт в API_URL.";
+                fillProductSelect();
+            } catch (err) {
+                showError("Помилка завантаження товарів: " + err.message);
             }
         }
+
+        function openProductForm(product = null) {
+            document.getElementById("productForm").classList.add("active");
+            document.getElementById("productId").value = product ? product.productId : "";
+            document.getElementById("productName").value = product ? product.productName : "";
+            document.getElementById("productCategory").value = product ? product.category : "";
+            document.getElementById("productPrice").value = product ? product.price : "";
+        }
+
+        function closeProductForm() {
+            document.getElementById("productForm").classList.remove("active");
+        }
+
+        async function saveProduct() {
+            const id = document.getElementById("productId").value;
+            const data = {
+                productName: document.getElementById("productName").value,
+                category: document.getElementById("productCategory").value,
+                price: parseFloat(document.getElementById("productPrice").value) || 0
+            };
+            try {
+                if (id) {
+                    await apiCall(`${BASE_URL}/products/${id}`, "PUT", data);
+                } else {
+                    await apiCall(`${BASE_URL}/products`, "POST", data);
+                }
+                closeProductForm();
+                loadProducts();
+            } catch (err) {
+                showError("Помилка збереження товару: " + err.message);
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm("Видалити цей товар?")) return;
+            try {
+                await apiCall(`${BASE_URL}/products/${id}`, "DELETE");
+                loadProducts();
+            } catch (err) {
+                showError("Помилка видалення товару: " + err.message);
+            }
+        }
+
+        // ===================== COMPOSITION =====================
+
+        let allWarehouses = [];
+
+        async function loadWarehouses() {
+            showError("");
+            const tbody = document.getElementById("warehousesBody");
+            tbody.innerHTML = "";
+            try {
+                allWarehouses = await apiCall(`${BASE_URL}/warehouses`);
+                allWarehouses.forEach(w => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                                        <td>${w.warehouseId}</td><td>${w.warehouseName}</td><td>${w.address}</td>
+                                        <td>
+                                            <button class="edit" onclick='openWarehouseForm(${JSON.stringify(w)})'>✏️</button>
+                                            <button class="danger" onclick="deleteWarehouse(${w.warehouseId})">🗑️</button>
+                                        </td>`;
+                    tbody.appendChild(row);
+                });
+                fillWarehouseSelect();
+            } catch (err) {
+                showError("Помилка завантаження складів: " + err.message);
+            }
+        }
+
+        function openWarehouseForm(warehouse = null) {
+            document.getElementById("warehouseForm").classList.add("active");
+            document.getElementById("warehouseId").value = warehouse ? warehouse.warehouseId : "";
+            document.getElementById("warehouseName").value = warehouse ? warehouse.warehouseName : "";
+            document.getElementById("warehouseAddress").value = warehouse ? warehouse.address : "";
+        }
+
+        function closeWarehouseForm() {
+            document.getElementById("warehouseForm").classList.remove("active");
+        }
+
+        async function saveWarehouse() {
+            const id = document.getElementById("warehouseId").value;
+            const data = {
+                warehouseName: document.getElementById("warehouseName").value,
+                address: document.getElementById("warehouseAddress").value
+            };
+            try {
+                if (id) {
+                    await apiCall(`${BASE_URL}/warehouses/${id}`, "PUT", data);
+                } else {
+                    await apiCall(`${BASE_URL}/warehouses`, "POST", data);
+                }
+                closeWarehouseForm();
+                loadWarehouses();
+            } catch (err) {
+                showError("Помилка збереження складу: " + err.message);
+            }
+        }
+
+        async function deleteWarehouse(id) {
+            if (!confirm("Видалити цей склад?")) return;
+            try {
+                await apiCall(`${BASE_URL}/warehouses/${id}`, "DELETE");
+                loadWarehouses();
+            } catch (err) {
+                showError("Помилка видалення складу: " + err.message);
+            }
+        }
+
+        // ===================== BALANCES =====================
+
+        async function loadStock() {
+            showError("");
+            const tbody = document.getElementById("stockBody");
+            tbody.innerHTML = "";
+            try {
+                const stocks = await apiCall(`${BASE_URL}/stock`);
+                stocks.forEach(s => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                                        <td>${s.productName}</td><td>${s.warehouseName}</td>
+                                        <td><span class="badge">${s.quantity} шт</span></td>
+                                        <td><button class="danger" onclick="deleteStock(${s.stockId})">🗑️</button></td>`;
+                    tbody.appendChild(row);
+                });
+            } catch (err) {
+                showError("Помилка завантаження залишків: " + err.message);
+            }
+        }
+
+        // Fill in the drop-down lists of products/warehouses for the stock levels formч
+        function fillProductSelect() {
+            const select = document.getElementById("stockProductId");
+            select.innerHTML = '<option value="">Товар...</option>';
+            allProducts.forEach(p => {
+                select.innerHTML += `<option value="${p.productId}">${p.productName}</option>`;
+            });
+        }
+
+        function fillWarehouseSelect() {
+            const select = document.getElementById("stockWarehouseId");
+            select.innerHTML = '<option value="">Склад...</option>';
+            allWarehouses.forEach(w => {
+                select.innerHTML += `<option value="${w.warehouseId}">${w.warehouseName}</option>`;
+            });
+        }
+
+        function openStockForm() {
+            document.getElementById("stockForm").classList.add("active");
+        }
+
+        function closeStockForm() {
+            document.getElementById("stockForm").classList.remove("active");
+        }
+
+        async function saveStock() {
+            const data = {
+                productId: parseInt(document.getElementById("stockProductId").value),
+                warehouseId: parseInt(document.getElementById("stockWarehouseId").value),
+                quantity: parseInt(document.getElementById("stockQuantity").value) || 0
+            };
+            if (!data.productId || !data.warehouseId) {
+                showError("Обери товар і склад перед збереженням");
+                return;
+            }
+            try {
+                await apiCall(`${BASE_URL}/stock`, "POST", data);
+                closeStockForm();
+                loadStock();
+            } catch (err) {
+                showError("Помилка збереження залишку: " + err.message);
+            }
+        }
+
+        async function deleteStock(id) {
+            if (!confirm("Видалити цей запис про залишок?")) return;
+            try {
+                await apiCall(`${BASE_URL}/stock/${id}`, "DELETE");
+                loadStock();
+            } catch (err) {
+                showError("Помилка видалення залишку: " + err.message);
+            }
+        }
+
+        // Load everything at once when the page opens
+        loadProducts();
+        loadWarehouses();
     </script>
 </body>
 </html>
