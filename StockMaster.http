@@ -1,0 +1,6 @@
+@Stock_Master_HostAddress = http://localhost:5239/
+
+GET {{Stock_Master_HostAddress}}
+Accept: application/json
+
+###
